@@ -4,7 +4,7 @@
  *
  * Exposes the iJustOrder in-venue ordering platform API as MCP tools
  * for LLMs and AI agents to manage venues, events, menus, sections,
- * tickets, and promotions.
+ * tickets, promotions, orders, carts, and payments.
  *
  * Supports two transports:
  *   - stdio  (default, for local MCP clients like Claude Desktop)
@@ -33,13 +33,14 @@ const { registerEventTools } = require('./tools/events');
 const { registerSectionTools } = require('./tools/sections');
 const { registerMenuTools } = require('./tools/menu');
 const { registerTicketTools, registerPromotionTools } = require('./tools/tickets');
+const { registerCartTools, registerOrderTools, registerPaymentTools } = require('./tools/orders');
 const { registerUtilityTools } = require('./tools/utility');
 
 // ── Create the MCP server ──────────────────────────────────────────
 const server = new McpServer({
   name: 'ijustorder',
   version: '1.0.0',
-  description: 'iJustOrder — In-venue food, beverage, and merchandise ordering platform. Manage venues, events, seating sections, menus, tickets, and promotions across 13+ stadiums and arenas.',
+  description: 'iJustOrder — In-venue food, beverage, and merchandise ordering platform. Manage venues, events, menus, sections, orders, carts, payments, tickets, and promotions across 14+ stadiums and arenas.',
 });
 
 // ── Register all tools ─────────────────────────────────────────────
@@ -49,6 +50,9 @@ registerSectionTools(server);
 registerMenuTools(server);
 registerTicketTools(server);
 registerPromotionTools(server);
+registerCartTools(server);
+registerOrderTools(server);
+registerPaymentTools(server);
 registerUtilityTools(server);
 
 // ── Start the server ───────────────────────────────────────────────
@@ -62,7 +66,7 @@ async function main() {
 
     // Health check
     app.get('/health', (req, res) => {
-      res.json({ status: 'ok', server: 'ijustorder-mcp', version: '1.0.0', tools: 20 });
+      res.json({ status: 'ok', server: 'ijustorder-mcp', version: '1.0.0', tools: 30 });
     });
 
     // SSE endpoint for MCP clients
