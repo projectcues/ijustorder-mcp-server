@@ -65,7 +65,11 @@ function registerOrderTools(server) {
   server.tool('get_order', 'Get a specific order by ID, including order items and status.',
     { order_id: z.string().describe('The order UUID') },
     async ({ order_id }) => {
-      const result = await apiCall('GET', `api-orders/${order_id}`);
+      const result = await apiCall('GET', `api-orders?id=${order_id}`);
+      // Unwrap single result from list
+      if (result.data && Array.isArray(result.data) && result.data.length > 0) {
+        result.data = result.data[0];
+      }
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
     });
 
@@ -132,7 +136,10 @@ function registerPaymentTools(server) {
   server.tool('get_payment', 'Get a specific payment by ID.',
     { payment_id: z.string().describe('The payment UUID') },
     async ({ payment_id }) => {
-      const result = await apiCall('GET', `api-payments/${payment_id}`);
+      const result = await apiCall('GET', `api-payments?id=${payment_id}`);
+      if (result.data && Array.isArray(result.data) && result.data.length > 0) {
+        result.data = result.data[0];
+      }
       return { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] };
     });
 }
