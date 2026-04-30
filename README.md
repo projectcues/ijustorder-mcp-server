@@ -62,13 +62,13 @@ Add to your MCP config (`~/.gemini/antigravity/mcp_config.json` or Claude Deskto
 }
 ```
 
-### Remote (SSE/HTTP — Hostinger)
+### Remote (SSE/HTTP — Live at mcp.ijustorder.com)
 
 ```json
 {
   "mcpServers": {
     "ijustorder": {
-      "url": "https://your-hostinger-domain.com/sse"
+      "url": "https://mcp.ijustorder.com/sse"
     }
   }
 }
