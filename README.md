@@ -74,8 +74,9 @@ Add to your MCP config (`~/.gemini/antigravity/mcp_config.json` or Claude Deskto
 }
 ```
 
-## Available Tools (20)
+## Available Tools (37)
 
+### Venues (5)
 | Tool | Description |
 |------|-------------|
 | `list_venues` | List all venues |
@@ -83,44 +84,99 @@ Add to your MCP config (`~/.gemini/antigravity/mcp_config.json` or Claude Deskto
 | `create_venue` | Create a venue |
 | `update_venue` | Update a venue |
 | `delete_venue` | Delete a venue |
-| `list_events` | List events (filterable) |
+
+### Events (5)
+| Tool | Description |
+|------|-------------|
+| `list_events` | List events (filterable by venue) |
 | `get_event` | Get event by ID |
 | `create_event` | Create an event |
 | `update_event` | Update an event |
 | `delete_event` | Delete an event |
+
+### Sections (4)
+| Tool | Description |
+|------|-------------|
 | `list_sections` | List sections by venue |
 | `create_section` | Create a section |
 | `update_section` | Update a section |
 | `delete_section` | Delete a section |
+
+### Menu (7)
+| Tool | Description |
+|------|-------------|
+| `list_menu_categories` | List menu categories |
+| `create_menu_category` | Create a category |
 | `list_menu_items` | List menu items (filterable) |
 | `get_menu_item` | Get item by ID |
 | `create_menu_item` | Create a menu item |
 | `update_menu_item` | Update a menu item |
 | `delete_menu_item` | Delete a menu item |
-| `list_menu_categories` | List categories |
-| `create_menu_category` | Create a category |
+
+### Tickets & Promotions (3)
+| Tool | Description |
+|------|-------------|
 | `list_ticket_types` | List ticket types |
 | `list_promotions` | List promotions |
 | `create_promotion` | Create a promotion |
-| `get_platform_summary` | Platform overview |
-| `get_venue_detail` | Full venue detail |
-| `search_menu_items` | Search menu items |
+
+### Cart (3)
+| Tool | Description |
+|------|-------------|
+| `get_cart` | Get current cart contents |
+| `set_cart` | Create/replace cart with items |
+| `clear_cart` | Clear the cart |
+
+### Orders (5)
+| Tool | Description |
+|------|-------------|
+| `list_orders` | List orders (filter by event/status) |
+| `get_order` | Get order by ID with items |
+| `create_order` | Place an order |
+| `update_order` | Update order status (confirm, prepare, deliver) |
+| `cancel_order` | Cancel an order |
+
+### Payments (2)
+| Tool | Description |
+|------|-------------|
+| `list_payments` | List payments (filter by order) |
+| `get_payment` | Get payment by ID |
+
+### Utility (3)
+| Tool | Description |
+|------|-------------|
+| `get_platform_summary` | Platform-wide overview |
+| `get_venue_detail` | Full venue detail with events |
+| `search_menu_items` | Search menu items by name |
+
+## REST Endpoints
+
+In addition to the MCP SSE transport, the server exposes REST endpoints:
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/health` | GET | Server health & tool count |
+| `/tools` | GET | Full JSON tool schema (no SSE required) |
+| `/sse` | GET | MCP SSE transport endpoint |
+| `/messages` | POST | MCP message handler |
 
 ## Architecture
 
 ```
 src/
-├── index.js          # Server entry (stdio + HTTP/SSE)
+├── index.js          # Server entry (stdio + HTTP/SSE + REST)
 ├── api.js            # API client with retry & pagination
 └── tools/
-    ├── venues.js     # Venue CRUD
-    ├── events.js     # Event CRUD
-    ├── sections.js   # Section CRUD
-    ├── menu.js       # Menu categories & items
-    ├── tickets.js    # Tickets & promotions
-    └── utility.js    # Summaries & search
+    ├── venues.js     # Venue CRUD (5 tools)
+    ├── events.js     # Event CRUD (5 tools)
+    ├── sections.js   # Section CRUD (4 tools)
+    ├── menu.js       # Menu categories & items (7 tools)
+    ├── tickets.js    # Tickets & promotions (3 tools)
+    ├── orders.js     # Cart, orders, payments (10 tools)
+    └── utility.js    # Summaries & search (3 tools)
 ```
 
 ## License
 
 MIT — iJustOrder, Inc.
+
